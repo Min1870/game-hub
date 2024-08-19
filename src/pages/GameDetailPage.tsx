@@ -3,6 +3,11 @@ import { useParams } from "react-router-dom";
 import ExpandableText from "../components/ExpandableText";
 import useGame from "../hooks/useGame";
 
+const extractEnglishText = (text: string) => {
+  const englishText = text.split("Español")[0].trim();
+  return englishText;
+};
+
 const GameDetailPage = () => {
   const { slug } = useParams();
   const { data: game, isLoading, error } = useGame(slug!);
@@ -11,10 +16,12 @@ const GameDetailPage = () => {
 
   if (error || !game) throw error;
 
+  const description = extractEnglishText(game.description_raw);
+
   return (
     <>
       <Heading>{game.name}</Heading>
-      <ExpandableText>{game.description_raw}</ExpandableText>
+      <ExpandableText>{description}</ExpandableText>
     </>
   );
 };
